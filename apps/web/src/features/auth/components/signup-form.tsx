@@ -1,7 +1,10 @@
 "use client";
+import { CheckIcon } from "lucide-react";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useId } from "react";
 import { CiFacebook } from "react-icons/ci";
+import { toast } from "sonner";
 
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,12 +15,29 @@ import {
   CardTitle
 } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
+import { useAppForm } from "@repo/ui/components/tanstack-form";
 import { cn } from "@repo/ui/lib/utils";
+
+import { authClient } from "@/lib/auth-client";
+import { signupSchema, type SignupSchema } from "../schemas";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const toastId = useId();
+  const router = useRouter();
+
+  const form = useAppForm({
+    validators: { onChange: signupSchema },
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: ""
+    },
+    onSubmit: ({ value }) => handleSignup(value)
+  });
+
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
@@ -26,6 +46,26 @@ export function SignupForm({
     },
     [form]
   );
+
+  const handleSignup = async (values: SignupSchema) => {
+    await authClient.signUp.email({
+      email: values.email,
+      password: values.password,
+      name: "",
+      fetchOptions: {
+        onRequest() {
+          toast.loading("Registering new user...", { id: toastId });
+        },
+        onSuccess(ctx) {
+          toast.success("User registered successfully !", { id: toastId });
+          router.push("/signin");
+        },
+        onError(ctx) {
+          toast.error(`Failed: ${ctx.error.message}`, { id: toastId });
+        }
+      }
+    });
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -113,7 +153,12 @@ export function SignupForm({
                 {/* -------- */}
 
                 <div className="grid gap-6">
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    loading={form.state.isSubmitting}
+                    icon={form.state.isSubmitSuccessful && <CheckIcon />}
+                  >
                     Sign Up
                   </Button>
                 </div>

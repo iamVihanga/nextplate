@@ -112,6 +112,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@better-fetch/fetch':
+        specifier: ^1.1.18
+        version: 1.1.18
       '@nextplate/api':
         specifier: workspace:_
         version: link:../api

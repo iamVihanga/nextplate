@@ -4,8 +4,10 @@ import { defaultHook } from "stoker/openapi";
 
 import type { AppBindings, AppOpenAPI } from "@/types";
 
+import env from "@/env";
 import { BASE_PATH } from "@/lib/constants";
 import { logger } from "@/middlewares/pino-logger";
+import { cors } from "hono/cors";
 import { auth } from "./auth";
 
 export const createRouter = function (): OpenAPIHono<AppBindings> {
@@ -21,6 +23,19 @@ export default function createApp(): OpenAPIHono<AppBindings> {
   // Middleware
   app.use(serveEmojiFavicon("🚀"));
   app.use(logger());
+
+  // ------ CORS Middleware ------
+  app.use(
+    "*", // "*" enables cors for all routes
+    cors({
+      origin: [env.CLIENT_APP_URL], // replace with your origin
+      allowHeaders: ["Content-Type", "Authorization"],
+      allowMethods: ["POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      exposeHeaders: ["Content-Length"],
+      maxAge: 600,
+      credentials: true
+    })
+  );
 
   // -------------------------------------------------
   // Better auth Authentication Middleware

@@ -9,7 +9,9 @@ import { toast } from "sonner";
 import { env } from "@/lib/env";
 
 export const authClient = createAuthClient({
+  // Domain Configurations
   baseURL: env.NEXT_PUBLIC_BACKEND_URL,
+
   plugins: [adminClient(), apiKeyClient(), organizationClient()],
   fetchOptions: {
     onError: (ctx) => {
