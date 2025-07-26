@@ -14,7 +14,7 @@ export const getClient = async () => {
     cookiesList = "";
   }
 
-  return rpc(process.env.NEXT_PUBLIC_BACKEND_URL!, {
+  return rpc(process.env.NEXT_PUBLIC_APP_URL!, {
     headers: {
       cookie: cookiesList
     }
