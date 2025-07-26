@@ -2,10 +2,9 @@ import { desc, eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
-import type { AppRouteHandler } from "@/types";
+import type { AppRouteHandler } from "@api/types";
 
-import { db } from "@/db";
-import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/lib/constants";
+import { db } from "@api/db";
 import { tasks } from "@repo/database/schemas";
 
 import type {
@@ -30,6 +29,14 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
 // Create new task route handler
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
   const task = c.req.valid("json");
+  const session = c.get("user");
+
+  if (!session) {
+    return c.json(
+      { message: HttpStatusPhrases.UNAUTHORIZED },
+      HttpStatusCodes.UNAUTHORIZED
+    );
+  }
 
   const [inserted] = await db.insert(tasks).values(task).returning();
 
@@ -57,24 +64,12 @@ export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
 export const patch: AppRouteHandler<PatchRoute> = async (c) => {
   const { id } = c.req.valid("param");
   const updates = c.req.valid("json");
+  const session = c.get("user");
 
-  // Checs at least one field is present in the request body
-  if (Object.keys(updates).length === 0) {
+  if (!session) {
     return c.json(
-      {
-        success: false,
-        error: {
-          issues: [
-            {
-              code: ZOD_ERROR_CODES.INVALID_UPDATES,
-              path: [],
-              message: ZOD_ERROR_MESSAGES.NO_UPDATES
-            }
-          ],
-          name: "ZodError"
-        }
-      },
-      HttpStatusCodes.UNPROCESSABLE_ENTITY
+      { message: HttpStatusPhrases.UNAUTHORIZED },
+      HttpStatusCodes.UNAUTHORIZED
     );
   }
 
@@ -102,6 +97,14 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
 // Remove task route handler
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
   const { id } = c.req.valid("param");
+  const session = c.get("user");
+
+  if (!session) {
+    return c.json(
+      { message: HttpStatusPhrases.UNAUTHORIZED },
+      HttpStatusCodes.UNAUTHORIZED
+    );
+  }
 
   const result = await db.delete(tasks).where(eq(tasks.id, id));
 

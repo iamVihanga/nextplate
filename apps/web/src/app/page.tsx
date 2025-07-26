@@ -1,10 +1,12 @@
-import { client } from "@/lib/rpc";
+import { getClient } from "@/lib/rpc/server";
 import { Card, CardContent } from "@repo/ui/components/card";
 
 import { AddNewTask } from "@/features/tasks/components/add-new-task";
 import { TaskCard } from "@/features/tasks/components/task-card";
 
 export default async function Home() {
+  const client = await getClient();
+
   const res = await client.api.tasks.$get();
   const tasks = await res.json();
 

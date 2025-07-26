@@ -2,7 +2,7 @@ import { createMiddleware } from "hono/factory";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@api/lib/auth";
 
 export const serverAuthMiddleware = createMiddleware(async (c, next) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });

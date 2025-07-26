@@ -2,11 +2,11 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { notFound, onError, serveEmojiFavicon } from "stoker/middlewares";
 import { defaultHook } from "stoker/openapi";
 
-import type { AppBindings, AppOpenAPI } from "@/types";
+import type { AppBindings, AppOpenAPI } from "@api/types";
 
-import env from "@/env";
-import { BASE_PATH } from "@/lib/constants";
-import { logger } from "@/middlewares/pino-logger";
+import env from "@api/env";
+import { BASE_PATH } from "@api/lib/constants";
+import { logger } from "@api/middlewares/pino-logger";
 import { cors } from "hono/cors";
 import { auth } from "./auth";
 

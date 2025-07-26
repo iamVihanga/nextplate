@@ -8,7 +8,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "paths": {
-      "@/*": ["./src/*"]
+      "@api/*": ["./src/*"]
     },
     "typeRoots": ["./node_modules/@types"],
     "types": ["bun"],

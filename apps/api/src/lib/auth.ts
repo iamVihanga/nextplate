@@ -2,13 +2,12 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import {
   admin as adminPlugin,
-  apiKey,
   openAPI,
   organization
 } from "better-auth/plugins";
 
-import { db } from "@/db";
-import env from "@/env";
+import { db } from "@api/db";
+import env from "@api/env";
 import * as schema from "@repo/database/schemas";
 
 export const auth = betterAuth({
@@ -21,7 +20,26 @@ export const auth = betterAuth({
     schema
   }),
   emailAndPassword: {
-    enabled: true
+    enabled: true,
+
+    sendResetPassword: async ({ user, url, token }) => {
+      // TODO: Implement email sending logic
+      console.log({
+        to: user.email,
+        subject: "Reset your password",
+        text: `Click the link to reset your password: ${url} \nToken: ${token}`
+      });
+    }
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }) => {
+      // TODO: Implement email sending logic
+      console.log({
+        to: user.email,
+        subject: "Verify your email address",
+        text: `Click the link to verify your email: ${url} \nToken: ${token}`
+      });
+    }
   },
   socialProviders: {
     // facebook: {
@@ -30,7 +48,6 @@ export const auth = betterAuth({
   plugins: [
     adminPlugin(),
     openAPI(),
-    apiKey(),
     organization({
       allowUserToCreateOrganization() {
         // TODO: In future, Allow permissions based on user's subscription

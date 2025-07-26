@@ -2,7 +2,7 @@
   "name": "@nextplate/api",
   "version": "1.0.0",
   "exports": {
-    "./routes": "./src/routes/index.ts",
+    "./routes": "./src/routes/registry.ts",
     "./schema": "./src/db/schema/index.ts",
     "./auth-permissions": "./src/lib/permissions.ts",
     "./lib/*": "./src/lib/*"

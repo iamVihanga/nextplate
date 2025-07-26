@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Router } from "@nextplate/api/routes";
 
 import { hc } from "hono/client";
 
 // create instance to inline type in build
 // https://hono.dev/docs/guides/rpc#compile-your-code-before-using-it-recommended
-// eslint-disable-next-line unused-imports/no-unused-vars
 const client = hc<Router>("", {
   fetch: ((input, init) => {
     return fetch(input, {

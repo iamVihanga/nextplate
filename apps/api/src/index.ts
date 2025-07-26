@@ -1,6 +1,6 @@
-import createApp from "@/lib/create-app";
-import configureOpenAPI from "@/lib/open-api-config";
-import { registerRoutes } from "@/routes";
+import createApp from "@api/lib/create-app";
+import configureOpenAPI from "@api/lib/open-api-config";
+import { registerRoutes } from "@api/routes/registry";
 
 import env from "./env";
 

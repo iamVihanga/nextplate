@@ -1,6 +1,6 @@
 "use server";
 
-import { client } from "@/lib/rpc";
+import { getClient } from "@/lib/rpc/server";
 import { revalidatePath } from "next/cache";
 import { type AddTaskSchema } from "../schemas";
 
@@ -9,13 +9,23 @@ export async function addTask(data: AddTaskSchema) {
     throw new Error("Task name is required");
   }
 
-  await client.api.tasks.$post({
+  const client = await getClient();
+
+  const response = await client.api.tasks.$post({
     json: {
       ...data,
       done: false
     }
   });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`${errorData.message}`);
+  }
+
+  const taskData = await response.json();
+
   // Revalidate the page to show the new task
   revalidatePath("/");
+  return taskData;
 }

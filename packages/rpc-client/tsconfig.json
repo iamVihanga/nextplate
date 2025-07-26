@@ -4,7 +4,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "rootDir": "src",
     "paths": {
-      "@/*": ["../../apps/api/src/*"]
+      "@api/*": ["../../apps/api/src/*"]
     },
     "typeRoots": ["./node_modules/@types"],
     "declaration": true,

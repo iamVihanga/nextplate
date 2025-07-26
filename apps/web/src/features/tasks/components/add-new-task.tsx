@@ -37,8 +37,9 @@ export function AddNewTask() {
 
         toast.success("Task created successfully!", { id: toastId });
       } catch (error) {
+        const err = error as Error;
         console.error("Failed to add task:", error);
-        toast.error("Failed to create task. Please try again.", {
+        toast.error(`Failed: ${err.message}`, {
           id: toastId
         });
       } finally {

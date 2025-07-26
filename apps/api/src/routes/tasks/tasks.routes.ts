@@ -1,9 +1,9 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
-import { createErrorSchema, IdParamsSchema } from "stoker/openapi/schemas";
+import { IdParamsSchema } from "stoker/openapi/schemas";
 
-import { notFoundSchema } from "@/lib/constants";
+import { errorMessageSchema } from "@api/lib/helpers";
 import {
   insertTaskSchema,
   selectTaskSchema,
@@ -40,8 +40,12 @@ export const create = createRoute({
       selectTaskSchema,
       "The created task"
     ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      errorMessageSchema,
+      "Unauthroized request"
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(insertTaskSchema),
+      errorMessageSchema,
       "The validation error(s)"
     )
   }
@@ -58,9 +62,12 @@ export const getOne = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(selectTaskSchema, "Requested task"),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, "Task not found"),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      errorMessageSchema,
+      "Task not found"
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(IdParamsSchema),
+      errorMessageSchema,
       "Invalid ID format"
     )
   }
@@ -78,9 +85,16 @@ export const patch = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(selectTaskSchema, "The updated task"),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, "Task not found"),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      errorMessageSchema,
+      "Unauthroized request"
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      errorMessageSchema,
+      "Task not found"
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(updateTaskSchema).or(createErrorSchema(IdParamsSchema)),
+      errorMessageSchema,
       "The validation error(s)"
     )
   }
@@ -99,9 +113,16 @@ export const remove = createRoute({
     [HttpStatusCodes.NO_CONTENT]: {
       description: "Task deleted"
     },
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, "Task not found"),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      errorMessageSchema,
+      "Unauthroized request"
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      errorMessageSchema,
+      "Task not found"
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(IdParamsSchema),
+      errorMessageSchema,
       "Invalid ID format"
     )
   }

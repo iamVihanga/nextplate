@@ -33,19 +33,33 @@ export function TaskCard({ task }: Props) {
     startTransition(async () => {
       try {
         toast.loading("Updating task status...", { id: toastId });
+
         await markAsCompleted(task.id, { done: e });
+
         toast.success("Task status updated", { id: toastId });
       } catch (error) {
-        console.log(error);
-        toast.error("Failed to update task status. Please try again.", {
-          id: toastId
-        });
+        const err = error as Error;
+        console.log(err);
+        toast.error(
+          err.message || "Failed to update task status. Please try again.",
+          {
+            id: toastId
+          }
+        );
       }
     });
   };
 
   const handleDelete = async () => {
-    await deleteTask(task.id);
+    try {
+      await deleteTask(task.id);
+    } catch (err) {
+      const error = err as Error;
+      console.error("Failed to delete task:", error);
+      toast.error(`Failed: ${error.message}`, {
+        id: toastId
+      });
+    }
   };
 
   return (

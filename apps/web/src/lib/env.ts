@@ -14,6 +14,13 @@ export type Env = z.infer<typeof EnvSchema>;
 
 let env: Env = EnvSchema.parse(process.env);
 
+// Extend process.env with the parsed environment variables
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv extends Env {}
+  }
+}
+
 try {
   env = EnvSchema.parse(process.env);
 } catch (err) {

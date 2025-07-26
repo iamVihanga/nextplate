@@ -1,5 +1,5 @@
-import { createRouter } from "@/lib/create-app";
-import { AppOpenAPI } from "@/types";
+import { createRouter } from "@api/lib/create-app";
+import { AppOpenAPI } from "@api/types";
 
 import { BASE_PATH } from "../lib/constants";
 import index from "./index.route";
