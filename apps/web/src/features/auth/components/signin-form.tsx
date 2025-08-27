@@ -82,7 +82,7 @@ export function SiginForm({
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
                   <Button variant="outline" className="w-full">
-                    <CiFacebook className="size-5" />
+                    <CiFacebook size={16} />
                     Signin with Facebook
                   </Button>
                 </div>

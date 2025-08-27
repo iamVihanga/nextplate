@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd ../.. && pnpm run build --filter=@nextplate/web",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
