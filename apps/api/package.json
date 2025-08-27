@@ -15,8 +15,9 @@
     "drizzle:migrate": "bunx drizzle-kit migrate",
     "drizzle:studio": "bunx drizzle-kit studio",
     "typecheck": "tsc --noEmit",
-    "start": "bun ./build/index.js",
-    "build": "bun build ./src/index.ts --outdir ./build --target=bun"
+    "start": "node ./dist/index.js",
+    "build": "tsc",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@antfu/eslint-config": "^4.11.0",
